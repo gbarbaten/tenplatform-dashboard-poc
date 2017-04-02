@@ -9,7 +9,6 @@ import { ApiService } from './api.service';
 @Injectable()
 export class LoginService {
   _headers: Headers;
-  _jwt_auth;
 
   constructor(
     private apiService: ApiService,
@@ -19,9 +18,9 @@ export class LoginService {
       'Content-Type': 'application/json'
     });
     this._store.select('jwt_auth').subscribe((jwt_auth:any) => {
+      console.log("get new token:", jwt_auth);
       if(jwt_auth) {
-        this._headers.set('Authorization', `JWT ${jwt_auth.access_token}`);
-        this._jwt_auth = jwt_auth;
+        this._headers.set('Authorization', `JWT ${jwt_auth.token}`);
       }
       else
         this._headers.delete('Authorization');
@@ -36,7 +35,7 @@ export class LoginService {
       'type': 'staff',
       'email': email,
       'password': password,
-    });
+    }, this._headers);
 
     req.subscribe(resp => this._store.dispatch({ type: 'LOGIN', payload: resp }));
 

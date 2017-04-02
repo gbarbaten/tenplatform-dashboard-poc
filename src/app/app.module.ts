@@ -2,9 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { StoreModule, combineReducers } from '@ngrx/store';
+import { StoreModule, provideStore } from '@ngrx/store';
 
 import { is_logged_in, jwt_auth } from './reducers';
+import { ApiService, LoginService } from './services';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -15,9 +16,12 @@ import { AppComponent } from './app.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    StoreModule.forRoot(combineReducers({ is_logged_in: is_logged_in, jwt_auth: jwt_auth }))
+    StoreModule.provideStore({ is_logged_in, jwt_auth })
   ],
-  providers: [],
+  providers: [
+    ApiService,
+    LoginService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

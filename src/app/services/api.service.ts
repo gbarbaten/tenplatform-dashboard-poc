@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/Rx';
 
@@ -17,7 +17,7 @@ export class ApiService {
     }
 
     /* GET */
-    public get(api:string, params?: string, header?:Headers): Observable<any> {
+    public get(api:string, params?: string, headers?:Headers): Observable<any> {
       const url = this.getUrl(api);
 
       return this.http.get(url)
@@ -25,10 +25,11 @@ export class ApiService {
     }
 
     /* POST */
-    public post(api:string, body?: any): Observable<any> {
+    public post(api:string, body?: any, headers?:Headers): Observable<any> {
       const myBody = JSON.stringify(body);
       const url = this.getUrl(api);
-      return this.http.post(url, myBody)
+      const options = new RequestOptions({ headers: headers });
+      return this.http.post(url, myBody, options)
         .map((response: Response) => response.json());
     }
 
